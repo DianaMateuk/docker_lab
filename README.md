@@ -50,3 +50,6 @@ USER appuser
 
 - db_data — для данных базы данных PostgreSQL.
 - static_data — для хранения статических файлов приложения.
+
+Container memory usage
+89.56MB
