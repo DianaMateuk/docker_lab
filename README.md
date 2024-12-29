@@ -9,23 +9,29 @@
 - requirements.txt: Список Python-зависимостей для проекта
 - Базовый образ: Мы используем легковесный образ python:3.11-alpine, который содержит минимальный набор библиотек для работы с Python.
 
-> FROM python:3.11-alpine
+`FROM python:3.11-alpine`
 Рабочая директория: Устанавливаем рабочую директорию внутри контейнера /app, в которую будут копироваться все файлы приложения.
 
-> WORKDIR /app
+`WORKDIR /app`
 Установка зависимостей: Копируем файл requirements.txt и устанавливаем все зависимости проекта с помощью pip. Для уменьшения размера образа используется флаг --no-cache-dir, чтобы не сохранялись кэши пакетов.
 
-> COPY requirements.txt .
-> RUN pip install --no-cache-dir -r requirements.txt
+```
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+```
 Копирование кода приложения: Копируем исходный код приложения, файлы миграций и конфигурации окружения (.env) в контейнер.
 
-> COPY ./app ./app
-> COPY .env .env
-> COPY ./migrations ./migrations
+```
+COPY ./app ./app
+COPY .env .env
+COPY ./migrations ./migrations
+```
 Создание непривилегированного пользователя: Создаем нового пользователя appuser и запускаем приложение от его имени. Это помогает повысить безопасность контейнера.
 
-> RUN addgroup -S appgroup && adduser -S appuser -G appgroup
-> USER appuser
+```
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER appuser
+```
 Запуск приложения: Приложение запускается с помощью uvicorn, который запускает сервер FastAPI.
 
 **Конфигурация для веб-приложения (web):**
